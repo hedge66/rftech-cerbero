@@ -1,0 +1,563 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bansky.SPOT.Mail</name>
+    </assembly>
+    <members>
+        <member name="T:Bansky.SPOT.Mail.SmtpErrorCode">
+            <summary>
+            Specifies the errors of sending e-mail by using the Bansky.SPOT.Mail.SmtpClient class 
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.BadResponse">
+            <summary>
+            Server send unexpected response.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.AuthNotSupported">
+            <summary>
+            Server has no support for LOGIN or PLAIN authentication method.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.AuthFailed">
+            <summary>
+            Authentication process failed.        
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.FromFailed">
+            <summary>
+            Server refused the sender.
+            </summary>        
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.RcptFailed">
+            <summary>
+            Server refused the recipients.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.DataFailed">
+            <summary>
+            Server refused the data.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.ConnectionClosed">
+            <summary>
+            Connection closed by server.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpErrorCode.ConnectionFailed">
+            <summary>
+            Socket error while connecting to the server.
+            </summary>
+        </member>
+        <member name="T:Bansky.SPOT.Mail.SmtpClient">
+            <summary>
+            Allows application to send e-mail by using Simple Mail Transfer Protocol (SMTP)
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes new instance of Bansky.SPOT.Mail.SmtpClient.
+            </summary>
+            <param name="host">server hostname.</param>
+            <param name="port">port to be used on the host.</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.Dispose">
+            <summary>
+            Dispose the SmtpClient
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.Send(Bansky.SPOT.Mail.MailMessage)">
+             <summary>
+             Sends the specified message to an SMTP server for delivery.
+             </summary>
+             <param name="message">Bansky.SPOT.Mail.MailMessage that contains message to send.</param>
+             <exception cref="T:System.ArgumentNullException">Message or From is null reference.</exception>
+             <exception cref="T:System.ArgumentOutOfRangeException">There are no recipients in To, CC, and Bcc.</exception>
+             <exception cref="T:Bansky.SPOT.Mail.SmtpException">The connection or session failed.</exception>
+             <example>
+             This code sends e-mail message and use authentication to server
+             <code>
+            	using (SmtpClient smtp = new SmtpClient("smtp.hostname.net", 25))
+            	{
+            		// Create message
+            		MailMessage message = new MailMessage("john@doe.com",
+            											  "foo@bar.net",
+            											  "Good news",
+            											  "How are you Foo?");
+            
+            		// Authenicate to server
+            		smtp.Authenticate = true;
+            		smtp.Username = "userlogin";
+            		smtp.Password = "userpassword";
+            
+            		// Send message
+            		smtp.Send(message);
+            	}
+             </code>
+             This code sends HTML formated e-mail message with attachment to more recipients.
+             <code>
+            	MailMessage message = new MailMessage();
+            	// Set sender name and address
+            	message.From = new MailAddress("foobar@contoso.com", "Foo Bar");
+            	
+            	// Set recipients
+            	message.To.Add(new MailAddress("john.doe@customer.com", "John Doe"));
+            	message.Cc.Add(new MailAddress("manager@contoso.com"));
+            	
+            	message.Subject = "Hello World";
+            	message.Body = "Good news,<br/>from now on you can send e-mails from <b>.NET Micro Framework</b>.";
+            	// Format body as HTML
+            	message.IsBodyHtml = true;
+            	
+            	// Create new attachment and define it's name
+            	Attachment attachment = new Attachment("Snwoflake.gif");        
+            	attachment.ContentType = "image/gif";
+            	attachment.TransferEncoding = TransferEncoding.Base64;
+            	// Attachment content
+            	attachment.Content = Base64.Encode( Resources.GetBytes(
+            	                                    Resources.BinaryResources.Snowflake_gif),
+            	                                    true);
+            	
+            	// Add attachment to message
+            	message.Attachments.Add(attachment);
+            	
+            	// Create new SMTP instance
+            	SmtpClient smtp = new SmtpClient("smtp.contoso.com", 25);
+            	try
+            	{
+            		// Authenicate to server
+            		smtp.Authenticate = true;
+            		smtp.Username = "userlogin";
+            		smtp.Password = "userpassword";
+            	
+            		// Send message
+            		smtp.Send(message);
+            	}
+            	catch (SmtpException e)
+            	{
+            		// Exception handling here 
+            		Debug.Print(e.Message);
+            		Debug.Print("Error Code: " + e.ErrorCode.ToString());
+            	}
+            	finally
+            	{
+            		smtp.Dispose();
+            	}
+             </code>
+             </example>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.Send(System.String,System.String,System.String,System.String)">
+            <summary>
+            Sends the specified message to an SMTP server for delivery.
+            </summary>
+            <param name="from">Address information of the message sender.</param>
+            <param name="to">Address that message is sent to.</param>
+            <param name="subject">Subject line of the message.</param>
+            <param name="body">Contains the message body.</param>
+            <exception cref="T:System.ArgumentNullException">from or to is null reference</exception>
+            <exception cref="T:System.ArgumentException">from or to is String.Empty ("")</exception>        
+            <exception cref="T:Bansky.SPOT.Mail.SmtpException">connection or session errors</exception>
+            <example>
+            This code send simple e-mail message.
+            No authentication to server is used.
+            <code>
+            using (SmtpClient smtp = new SmtpClient("smtp.hostname.net", 25))
+            {
+            	// Send message
+            	smtp.Send("john@doe.com",
+            			  "foo@bar.net",
+            			  "Good news",
+            			  "How are you Foo?");
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.SendCommand(System.String)">
+            <summary>
+            Sends SMTP command or data through the socket.
+            </summary>
+            <param name="command">Data to be send.</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.SendCommand(System.String,System.String,Bansky.SPOT.Mail.SmtpErrorCode)">
+            <summary>
+            Sends SMTP command or data through the socket.
+            Waits for server response and evaluate it.
+            </summary>
+            <param name="command">Data to be send.</param>
+            <param name="expectedReply">Expected SMTP reply code.</param>
+            <param name="errorCode">Error code to be used in exception, when reply code do not match.</param>
+            <returns>Complete response from server.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.GetResponse">
+            <summary>
+            Reads SMTP responses through socket.
+            </summary>
+            <returns>Server response.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.GetResponse(System.String,Bansky.SPOT.Mail.SmtpErrorCode)">
+            <summary>
+            Reads SMTP responses through the socket and evaluate it.
+            </summary>
+            <param name="expectedReply">Expected SMTP reply code.</param>
+            <param name="errorCode">Error code to be used in exception, when reply code do not match.</param>
+            <returns>Server resposne.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.GetReplyCode(System.String)">
+            <summary>
+            Parses reply code from response.
+            </summary>
+            <param name="response">Response</param>
+            <returns>Reply code.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.DoRcpt(System.String,System.Collections.ArrayList)">
+            <summary>
+            Sends recipient command and data to the server.
+            </summary>
+            <param name="rcptType">Type of RCPT: To, Cc, Bcc.</param>
+            <param name="recipients">ArrayList of Bansky.SPOT.Mail.MailAddress with recipients.</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.DoAuthentication(System.String,System.String)">
+            <summary>
+            Does authentication to server.
+            Gets available authentication methods and use on of them.        
+            </summary>
+            <exception cref="T:System.NotSupportedException">When LOGIN or PLAIN method are not supported.</exception>
+            <param name="userName">Username</param>
+            <param name="passWord">Password</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.DoAuthPlain(System.String,System.String)">
+            <summary>
+            Does AUTH PLAIN authentication.
+            </summary>
+            <param name="userName">Username</param>
+            <param name="passWord">Password</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.DoAuthLogin(System.String,System.String)">
+            <summary>
+            Does AUTH LOGIN authentication.
+            </summary>
+            <param name="userName">Username</param>
+            <param name="passWord">Password</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.ProcessMessage(Bansky.SPOT.Mail.MailMessage)">
+            <summary>
+            Creates message body from MailMessage.
+            </summary>
+            <param name="message">MailMessage to be processed.</param>
+            <returns>String suitable for SMTP transaction.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.ProcessRcpt(System.String,System.Collections.ArrayList)">
+            <summary>
+            Creates list of recipients for message header.
+            </summary>
+            <param name="rcptType">Type of RCPT: To, Cc, Bcc.</param>
+            <param name="recipients">ArrayList of Bansky.SPOT.Mail.MailAddress with recipients.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.ProcessBody(Bansky.SPOT.Mail.MailMessage)">
+            <summary>
+            Creates message body wrapped in the appropriate content type header.
+            </summary>
+            <param name="message">MailMessage to process.</param>
+            <returns>Message body.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpClient.StrEndWith(System.String,System.String)">
+            <summary>
+            Test whether the string ends with the given pattern.
+            </summary>
+            <param name="data">String to be tested.</param>
+            <param name="pattern">Matching pattern.</param>
+            <returns>True when data ends with the pattern</returns>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpClient.Timeout">
+            <summary>
+            Socket timeout in miliseconds
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpClient.Domain">
+            <summary>
+            Domain to be send in HELO / EHLO command
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpClient.Host">
+            <summary>
+            Smtp server host name
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpClient.Username">
+            <summary>
+            Auth username
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpClient.Password">
+            <summary>
+            Auth password
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpClient.Port">
+            <summary>
+            Smtp server port
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpClient.Authenticate">
+            <summary>
+            Determines whether the authenication inromation is required
+            </summary>
+        </member>
+        <member name="T:Bansky.SPOT.Mail.Base64">
+            <summary>
+            Represents Base64 encoding / decoding functionality.
+            
+            Heavily based on Base64Encoder by Timm Martin.
+            http://www.csharp411.com/convert-binary-to-base64-string/
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.Base64.Encode(System.Byte[])">
+            <summary>
+            Encodes byte array into Base64 digits.
+            </summary>
+            <param name="data">Data to encode.</param>
+            <returns>Base64 encoded char array.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.Base64.Encode(System.Byte[],System.Boolean)">
+            <summary>
+            Encodes byte array into Base64 digits.
+            </summary>
+            <param name="data">Data to encode.</param>
+            <param name="insertLineBreaks">Determines whether the output will be MIME friendly.</param>
+            <returns>Base64 encoded string.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.Base64.Encode(System.String,System.Boolean)">
+            <summary>
+            Encodes string into Base64 digits.
+            </summary>
+            <param name="data">Data to encode.</param>
+            <param name="insertLineBreaks">Determines whether the output will be MIME friendly.</param>
+            <returns>Base64 encoded string.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.Base64.Decode(System.Char[])">
+            <summary>
+            Decodes data in Base64 encoding.
+            </summary>
+            <param name="data">Data to decode.</param>
+            <returns>Decoded data.</returns>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.Base64.Decode(System.String)">
+            <summary>
+            Decodes string in Base64 encoding.
+            </summary>
+            <param name="data">Data to decode.</param>
+            <returns>Decoded data.</returns>
+        </member>
+        <member name="T:Bansky.SPOT.Mail.TransferEncoding">
+            <summary>
+            Specifies the Content-Transfer-Encoding header information for an e-mail message attachment.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.TransferEncoding.QuotedPrintable">
+            <summary>
+            Encodes data that consists of printable characters in the US-ASCII character set. See RFC 2406 Section 6.7.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.TransferEncoding.Base64">
+            <summary>
+            Encodes stream-based data. See RFC 2406 Section 6.8.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.TransferEncoding.SevenBit">
+            <summary>
+            Used for data that is not encoded. The data is in 7-bit US-ASCII characters with a total line length of no longer than 1000 characters. See RFC2406 Section 2.7.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.TransferEncoding.Unknown">
+            <summary>
+            Indicates that the transfer encoding is unknown.
+            </summary>
+        </member>
+        <member name="T:Bansky.SPOT.Mail.SmtpException">
+            <summary>
+            The exception that is thrown when SMTP operation failed.
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpException.#ctor(System.String,Bansky.SPOT.Mail.SmtpErrorCode)">
+            <summary>
+            Initialize instance of SmtpException.
+            </summary>
+            <param name="message">Message of the exception.</param>
+            <param name="smtpError">Code of the exception.</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpException.#ctor(Bansky.SPOT.Mail.SmtpErrorCode)">
+            <summary>
+            Initialize instance of SmtpException.
+            </summary>
+            <param name="smtpError">Code of the exception.</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.SmtpException.#ctor(Bansky.SPOT.Mail.SmtpErrorCode,System.Exception)">
+            <summary>
+            Initialize instance of SmtpException.
+            </summary>
+            <param name="smtpError">Code of the exception.</param>
+            <param name="innerException">Inner exception wrapped by SmtpException</param>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.SmtpException.ErrorCode">
+            <summary>
+            Code of the exception.
+            </summary>
+        </member>
+        <member name="T:Bansky.SPOT.Mail.MailAddress">
+            <summary>
+            Represents the address of an electronic mail sender or recipient.
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.MailAddress.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the MailAddress class using the specified address. 
+            </summary>
+            <param name="address">A String that contains an e-mail address.</param>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.MailAddress.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the MailAddress class using the specified address and display name.
+            </summary>
+            <param name="address">A String that contains an e-mail address.</param>
+            <param name="displayName">A String that contains the display name associated with address. This parameter can be null reference</param>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailAddress.Address">
+            <summary>
+            Gets the e-mail address specified when this instance was created.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailAddress.DisplayName">
+            <summary>
+            Gets the display name composed from the display name and address information specified when this instance was created.
+            </summary>
+        </member>
+        <member name="T:Bansky.SPOT.Mail.Attachment">
+            <summary>
+            Represents an attachment to an e-mail.
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.Attachment.#ctor(System.String)">
+            <summary>
+            Initializes new instance of Bansky.SPOT.Mail.Attachment
+            </summary>
+            <param name="name">Attachment name as it appears in the e-mail message.</param>
+            <exception cref="T:System.ArgumentNullException">name is null reference</exception>
+            <exception cref="T:System.ArgumentException">name is String.Empty ("")</exception>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.Attachment.TransferEncoding">
+            <summary>
+            Gets or sets the encoding of this attachment.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.Attachment.ContentType">
+            <summary>
+            Content type of this attachment.
+            Default is application/octet-stream
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.Attachment.ContentId">
+            <summary>
+            Gets or sets the MIME content ID for this attachment.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.Attachment.Name">
+            <summary>
+            Name of this attachment as it appears in the e-mail message.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.Attachment.Content">
+            <summary>
+            Encoded content of the attachment.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.Attachment.Inline">
+            <summary>
+            Gets or sets a Boolean value that determines the disposition type (Inline or Attachment) for an e-mail attachment.
+            </summary>
+        </member>
+        <member name="T:Bansky.SPOT.Mail.MailMessage">
+            <summary>
+            Represents an e-email message that can be send using the Bansky.SPOT.Mail.SmtpClient
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.MailMessage.#ctor">
+            <summary>
+            Initializes an empty instance of the Bansky.SPOT.Mail.MailMessage.
+            </summary>
+        </member>
+        <member name="M:Bansky.SPOT.Mail.MailMessage.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes new instance of the Bansky.SPOT.Mail.MailMessage.
+            </summary>
+            <param name="from">Address information of the message sender.</param>
+            <param name="to">Address that message is sent to.</param>
+            <param name="subject">Subject line of the message.</param>
+            <param name="body">Contains the message body.</param>
+            <exception cref="T:System.ArgumentNullException">from or to is null reference</exception>
+            <exception cref="T:System.ArgumentException">from or to is String.Empty ("")</exception>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.To">
+            <summary>
+            Address collection that contains the recipients of this e-mail message.
+            ArrayList of Bansky.SPOT.Mail.MailAddress
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.Cc">
+            <summary>
+            Address collection that contains the carbon copy (CC) recipients of this e-mail message.
+            ArrayList of Bansky.SPOT.Mail.MailAddress
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.Bcc">
+            <summary>
+            Address collection that contains the blind carbon copy (BCC) recipients of this e-mail message.
+            ArrayList of Bansky.SPOT.Mail.MailAddress
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.Attachments">
+            <summary>
+            Attachments collection used to store data attached to this e-mail message.
+            ArrayList of Bansky.SPOT.Mail.Attachment
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.From">
+            <summary>
+            From address for this e-mail message.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.Body">
+            <summary>
+            Message body.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.Subject">
+            <summary>
+            Subject line of this e-mail message.
+            </summary>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.Headers">
+            <summary>
+            E-mail headers that are transmited with this e-mail message.
+            </summary>
+            <example>
+            This code will set name of the client and message priority
+            <code>
+            MailMessage message = new MailMessage("john@doe.com",
+            									  "foo@bar.net",
+            									  "Good news",
+            									  "How are you Foo?");        
+            
+            message.Headers = "X-Priority: 1\r\n";
+            message.Headers += "X-MSMail-Priority: High\r\n";
+            message.Headers += "X-Mailer: Micro Framework mail sender\r\n";
+            </code>
+            </example>
+        </member>
+        <member name="F:Bansky.SPOT.Mail.MailMessage.IsBodyHtml">
+            <summary>
+            Indicated whether the mail message body is in Html.
+            </summary>
+        </member>
+    </members>
+</doc>

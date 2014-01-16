@@ -1,0 +1,15 @@
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Debug\TinyCLR_DebugReferences.cache
+D:\Projects\BanskySPOTMail\BanskySPOTMail\bin\Debug\Bansky.SPOT.Mail.dll
+D:\Projects\BanskySPOTMail\BanskySPOTMail\bin\Debug\Bansky.SPOT.Mail.pdb
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Debug\Bansky.SPOT.Mail.pe
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Debug\Bansky.SPOT.Mail.dll
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Debug\Bansky.SPOT.Mail.pdb
+D:\Projects\BanskySPOTMail\BanskySPOTMail\bin\Release\Bansky.SPOT.Mail.dll
+D:\Projects\BanskySPOTMail\BanskySPOTMail\bin\Release\Bansky.SPOT.Mail.pdb
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Release\ResolveAssemblyReference.cache
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Release\TinyCLR_DebugReferences.cache
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Release\Bansky.SPOT.Mail.pe
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Release\Bansky.SPOT.Mail.dll
+D:\Projects\BanskySPOTMail\BanskySPOTMail\obj\Release\Bansky.SPOT.Mail.pdb
+D:\Projects\BanskySPOTMail\BanskySPOTMail\bin\Release\Bansky.SPOT.Mail.XML

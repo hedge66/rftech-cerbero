@@ -1,0 +1,17 @@
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\le\HttpServer.dll
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\be\HttpServer.dll
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\le\HttpServer.pdb
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\be\HttpServer.pdb
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\HttpServer.dll
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\HttpServer.pdb
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\le\HttpServer.pe
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\le\HttpServer.pdbx
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\be\HttpServer.pe
+C:\Downloads\Microframework\Webserver\WebServer\bin\Debug\be\HttpServer.pdbx
+C:\Downloads\Microframework\Webserver\WebServer\obj\Debug\TinyCLR_DebugReferences.cache
+C:\Downloads\Microframework\Webserver\WebServer\obj\Debug\HttpServer.dll
+C:\Downloads\Microframework\Webserver\WebServer\obj\Debug\HttpServer.pdb
+C:\Downloads\Microframework\Webserver\WebServer\obj\Debug\be\HttpServer.pe
+C:\Downloads\Microframework\Webserver\WebServer\obj\Debug\be\HttpServer.pdbx
+C:\Downloads\Microframework\Webserver\WebServer\obj\Debug\le\HttpServer.pe
+C:\Downloads\Microframework\Webserver\WebServer\obj\Debug\le\HttpServer.pdbx

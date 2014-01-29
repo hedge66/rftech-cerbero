@@ -16,7 +16,6 @@ Discarded input sections
  .bss           0x00000000        0x0 c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr4/crtm88.o
  .text          0x00000000        0x0 nRF2401_Transmitter.o
  .bss           0x00000000        0x0 nRF2401_Transmitter.o
- .text.GetReg   0x00000000       0x2c nRF2401_Transmitter.o
  .text.reset    0x00000000       0x2e nRF2401_Transmitter.o
  .text.receive_payload
                 0x00000000       0x1c nRF2401_Transmitter.o
@@ -161,7 +160,7 @@ LOAD c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-tool
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x36c
+.text           0x00000000      0x3e0
  *(.vectors)
  .vectors       0x00000000       0x34 c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr4/crtm88.o
                 0x00000000                __vector_default
@@ -255,29 +254,30 @@ LOAD c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-tool
  .text.INT0_interrupt_init
                 0x00000084       0x16 nRF2401_Transmitter.o
                 0x00000084                INT0_interrupt_init
+ .text.GetReg   0x0000009a       0x2c nRF2401_Transmitter.o
+                0x0000009a                GetReg
  .text.WriteToNrf
-                0x0000009a       0x96 nRF2401_Transmitter.o
-                0x0000009a                WriteToNrf
+                0x000000c6       0xa2 nRF2401_Transmitter.o
+                0x000000c6                WriteToNrf
  .text.nrf24L01_init
-                0x00000130      0x106 nRF2401_Transmitter.o
-                0x00000130                nrf24L01_init
+                0x00000168      0x106 nRF2401_Transmitter.o
+                0x00000168                nrf24L01_init
  .text.ChangeAddress
-                0x00000236       0x78 nRF2401_Transmitter.o
-                0x00000236                ChangeAddress
+                0x0000026e       0x78 nRF2401_Transmitter.o
+                0x0000026e                ChangeAddress
  .text.transmit_payload
-                0x000002ae       0x46 nRF2401_Transmitter.o
-                0x000002ae                transmit_payload
- .text.startup.main
-                0x000002f4       0x38 nRF2401_Transmitter.o
-                0x000002f4                main
+                0x000002e6       0x46 nRF2401_Transmitter.o
+                0x000002e6                transmit_payload
+ .text.main     0x0000032c       0x74 nRF2401_Transmitter.o
+                0x0000032c                main
  .text.__vector_1
-                0x0000032c       0x3c nRF2401_Transmitter.o
-                0x0000032c                __vector_1
-                0x00000368                . = ALIGN (0x2)
+                0x000003a0       0x3c nRF2401_Transmitter.o
+                0x000003a0                __vector_1
+                0x000003dc                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000368        0x0 c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr4\libgcc.a(_exit.o)
-                0x00000368                _exit
-                0x00000368                exit
+ .fini9         0x000003dc        0x0 c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr4\libgcc.a(_exit.o)
+                0x000003dc                _exit
+                0x000003dc                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -296,11 +296,11 @@ LOAD c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-tool
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000368        0x4 c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr4\libgcc.a(_exit.o)
+ .fini0         0x000003dc        0x4 c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/avr4\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000036c                _etext = .
+                0x000003e0                _etext = .
 
-.data           0x00800100        0x0 load address 0x0000036c
+.data           0x00800100        0x0 load address 0x000003e0
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.7.2/../../../../avr/lib/avr4/crtm88.o
@@ -315,22 +315,23 @@ LOAD c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-tool
                 0x00800100                _edata = .
                 0x00800100                PROVIDE (__data_end, .)
 
-.bss            0x00800100        0x3
+.bss            0x00800100        0x4
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.ret.1665  0x00800100        0x3 nRF2401_Transmitter.o
+ .bss.tmp.1705  0x00800103        0x1 nRF2401_Transmitter.o
  *(COMMON)
-                0x00800103                PROVIDE (__bss_end, .)
-                0x0000036c                __data_load_start = LOADADDR (.data)
-                0x0000036c                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800104                PROVIDE (__bss_end, .)
+                0x000003e0                __data_load_start = LOADADDR (.data)
+                0x000003e0                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800103        0x0
-                0x00800103                PROVIDE (__noinit_start, .)
+.noinit         0x00800104        0x0
+                0x00800104                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800103                PROVIDE (__noinit_end, .)
-                0x00800103                _end = .
-                0x00800103                PROVIDE (__heap_start, .)
+                0x00800104                PROVIDE (__noinit_end, .)
+                0x00800104                _end = .
+                0x00800104                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -396,31 +397,31 @@ LOAD c:/programmi/atmel/atmel toolchain/avr8 gcc/native/3.4.2.1002/avr8-gnu-tool
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xc21
+.debug_info     0x00000000      0xd06
  *(.debug_info)
- .debug_info    0x00000000      0xc21 nRF2401_Transmitter.o
+ .debug_info    0x00000000      0xd06 nRF2401_Transmitter.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x28d
+.debug_abbrev   0x00000000      0x29c
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x28d nRF2401_Transmitter.o
+ .debug_abbrev  0x00000000      0x29c nRF2401_Transmitter.o
 
-.debug_line     0x00000000      0x37f
+.debug_line     0x00000000      0x3a5
  *(.debug_line)
- .debug_line    0x00000000      0x37f nRF2401_Transmitter.o
+ .debug_line    0x00000000      0x3a5 nRF2401_Transmitter.o
 
 .debug_frame    0x00000000      0x188
  *(.debug_frame)
  .debug_frame   0x00000000      0x188 nRF2401_Transmitter.o
 
-.debug_str      0x00000000      0x1bf
+.debug_str      0x00000000      0x210
  *(.debug_str)
- .debug_str     0x00000000      0x1bf nRF2401_Transmitter.o
-                                0x1f8 (size before relaxing)
+ .debug_str     0x00000000      0x210 nRF2401_Transmitter.o
+                                0x249 (size before relaxing)
 
-.debug_loc      0x00000000      0x503
+.debug_loc      0x00000000      0x548
  *(.debug_loc)
- .debug_loc     0x00000000      0x503 nRF2401_Transmitter.o
+ .debug_loc     0x00000000      0x548 nRF2401_Transmitter.o
 
 .debug_macinfo
  *(.debug_macinfo)

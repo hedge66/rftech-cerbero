@@ -291,6 +291,7 @@ void transmit_payload(uint8_t * W_buff)
 int main(void)
 {
 	uint8_t W_buffer[dataLen];	//Creates a buffer to receive data with specified length (ex. dataLen = 5 bytes)
+	static uint8_t tmp;
 
 	clockprescale();
 	InitSPI();
@@ -305,12 +306,19 @@ int main(void)
 
 
 	
+	tmp = GetReg(7);
 	ChangeAddress(0x12);	//change address to send to different receiver
+	W_buffer[0] = 0x30;
+	W_buffer[1] = 0x31;
+	W_buffer[2] = 0x32;
 	transmit_payload(W_buffer);	//Sänder datan
 
 	while(1)
 	{
-
+		LED_ON;		//per controllare che il lde funzioni!
+		_delay_ms(500);
+		LED_OFF;
+		_delay_ms(500);
 	}
 	return 0;
 }

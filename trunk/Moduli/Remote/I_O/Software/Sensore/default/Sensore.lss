@@ -3,40 +3,40 @@ Sensore.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  0000036c  00000400  2**0
+  0 .data         00000000  00800100  000003e0  00000474  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000036c  00000000  00000000  00000094  2**1
+  1 .text         000003e0  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000003  00800100  00800100  00000400  2**0
+  2 .bss          00000004  00800100  00800100  00000474  2**0
                   ALLOC
-  3 .stab         000006cc  00000000  00000000  00000400  2**2
+  3 .stab         000006cc  00000000  00000000  00000474  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      00000097  00000000  00000000  00000acc  2**0
+  4 .stabstr      00000097  00000000  00000000  00000b40  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .comment      0000002f  00000000  00000000  00000b63  2**0
+  5 .comment      0000002f  00000000  00000000  00000bd7  2**0
                   CONTENTS, READONLY
-  6 .debug_aranges 00000088  00000000  00000000  00000b92  2**0
+  6 .debug_aranges 00000088  00000000  00000000  00000c06  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00000c21  00000000  00000000  00000c1a  2**0
+  7 .debug_info   00000d06  00000000  00000000  00000c8e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000028d  00000000  00000000  0000183b  2**0
+  8 .debug_abbrev 0000029c  00000000  00000000  00001994  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   0000037f  00000000  00000000  00001ac8  2**0
+  9 .debug_line   000003a5  00000000  00000000  00001c30  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  00000188  00000000  00000000  00001e48  2**2
+ 10 .debug_frame  00000188  00000000  00000000  00001fd8  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    000001bf  00000000  00000000  00001fd0  2**0
+ 11 .debug_str    00000210  00000000  00000000  00002160  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00000503  00000000  00000000  0000218f  2**0
+ 12 .debug_loc    00000548  00000000  00000000  00002370  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000078  00000000  00000000  00002692  2**0
+ 13 .debug_ranges 00000078  00000000  00000000  000028b8  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	19 c0       	rjmp	.+50     	; 0x34 <__ctors_end>
-   2:	94 c1       	rjmp	.+808    	; 0x32c <__vector_1>
+   2:	ce c1       	rjmp	.+924    	; 0x3a0 <__vector_1>
    4:	27 c0       	rjmp	.+78     	; 0x54 <__bad_interrupt>
    6:	26 c0       	rjmp	.+76     	; 0x54 <__bad_interrupt>
    8:	25 c0       	rjmp	.+74     	; 0x54 <__bad_interrupt>
@@ -80,11 +80,11 @@ Disassembly of section .text:
   48:	1d 92       	st	X+, r1
 
 0000004a <.do_clear_bss_start>:
-  4a:	a3 30       	cpi	r26, 0x03	; 3
+  4a:	a4 30       	cpi	r26, 0x04	; 4
   4c:	b2 07       	cpc	r27, r18
   4e:	e1 f7       	brne	.-8      	; 0x48 <.do_clear_bss_loop>
-  50:	51 d1       	rcall	.+674    	; 0x2f4 <main>
-  52:	8a c1       	rjmp	.+788    	; 0x368 <_exit>
+  50:	6d d1       	rcall	.+730    	; 0x32c <main>
+  52:	c4 c1       	rjmp	.+904    	; 0x3dc <_exit>
 
 00000054 <__bad_interrupt>:
   54:	d5 cf       	rjmp	.-86     	; 0x0 <__vectors>
@@ -182,618 +182,701 @@ void INT0_interrupt_init(void)
   96:	e8 9a       	sbi	0x1d, 0	; 29
   98:	08 95       	ret
 
-0000009a <WriteToNrf>:
-}
-
-
-/*****************nrf-setup***************************/ //Ställer in nrf'en genoma att först skicka vilket register, sen värdet på registret.
-uint8_t *WriteToNrf(uint8_t ReadWrite, uint8_t reg, uint8_t *val, uint8_t antVal)	//tar in "ReadWrite" (W el R), "reg" (ett register), "*val" (en array) & "antVal" (antal integer i variabeln)
-{
-  9a:	cf 92       	push	r12
-  9c:	df 92       	push	r13
-  9e:	ef 92       	push	r14
-  a0:	ff 92       	push	r15
-  a2:	0f 93       	push	r16
-  a4:	1f 93       	push	r17
-  a6:	cf 93       	push	r28
-  a8:	df 93       	push	r29
-  aa:	c8 2e       	mov	r12, r24
-  ac:	d6 2e       	mov	r13, r22
-  ae:	7a 01       	movw	r14, r20
-  b0:	02 2f       	mov	r16, r18
-	cli();	//disable global interrupt
-  b2:	f8 94       	cli
-	
-	if (ReadWrite == W)	//W=vill skriva till nrf-en (R=läsa av den, R_REGISTER (0x00) ,så skiter i en else funktion)
-  b4:	81 11       	cpse	r24, r1
-  b6:	02 c0       	rjmp	.+4      	; 0xbc <WriteToNrf+0x22>
-	{
-		reg = W_REGISTER + reg;	//ex: reg = EN_AA: 0b0010 0000 + 0b0000 0001 = 0b0010 0001  
-  b8:	80 e2       	ldi	r24, 0x20	; 32
-  ba:	d8 0e       	add	r13, r24
+0000009a <GetReg>:
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  bc:	8a e1       	ldi	r24, 0x1A	; 26
-  be:	8a 95       	dec	r24
-  c0:	f1 f7       	brne	.-4      	; 0xbe <WriteToNrf+0x24>
-  c2:	00 c0       	rjmp	.+0      	; 0xc4 <WriteToNrf+0x2a>
+  9a:	9a e1       	ldi	r25, 0x1A	; 26
+  9c:	9a 95       	dec	r25
+  9e:	f1 f7       	brne	.-4      	; 0x9c <GetReg+0x2>
+  a0:	00 c0       	rjmp	.+0      	; 0xa2 <GetReg+0x8>
+//funktion för att hämta nåt av nrf's register
+uint8_t GetReg(uint8_t reg)
+{	
+	//andvändning: USART_Transmit(GetReg(STATUS)); //där status är registret du vill kolla
+	_delay_us(10);
+	CSn_LOW;	//CSN low
+  a2:	2a 98       	cbi	0x05, 2	; 5
+  a4:	9a e1       	ldi	r25, 0x1A	; 26
+  a6:	9a 95       	dec	r25
+  a8:	f1 f7       	brne	.-4      	; 0xa6 <GetReg+0xc>
+  aa:	00 c0       	rjmp	.+0      	; 0xac <GetReg+0x12>
+	_delay_us(10);
+	WriteByteSPI(R_REGISTER + reg);	//Vilket register vill du läsa (nu med R_Register för att inget ska skrivas till registret)
+  ac:	e3 df       	rcall	.-58     	; 0x74 <WriteByteSPI>
+  ae:	8a e1       	ldi	r24, 0x1A	; 26
+  b0:	8a 95       	dec	r24
+  b2:	f1 f7       	brne	.-4      	; 0xb0 <GetReg+0x16>
+  b4:	00 c0       	rjmp	.+0      	; 0xb6 <GetReg+0x1c>
+	_delay_us(10);
+	reg = WriteByteSPI(NOP);	//Skicka NOP antalet byte som du vill hämta (oftast 1gång, men t.ex addr är 5 byte!) och spara isf inte i "reg" utan en array med en loop
+  b6:	8f ef       	ldi	r24, 0xFF	; 255
+  b8:	dd df       	rcall	.-70     	; 0x74 <WriteByteSPI>
+  ba:	9a e1       	ldi	r25, 0x1A	; 26
+  bc:	9a 95       	dec	r25
+  be:	f1 f7       	brne	.-4      	; 0xbc <GetReg+0x22>
+  c0:	00 c0       	rjmp	.+0      	; 0xc2 <GetReg+0x28>
+	_delay_us(10);
+	CSn_HIGH;	//CSN IR_High
+  c2:	2a 9a       	sbi	0x05, 2	; 5
+	return reg;	// Returnerar registret förhoppningsvis med bit5=1 (tx_ds=lyckad sändning)
+}
+  c4:	08 95       	ret
+
+000000c6 <WriteToNrf>:
+
+
+/*****************nrf-setup***************************/ //Ställer in nrf'en genoma att först skicka vilket register, sen värdet på registret.
+uint8_t *WriteToNrf(uint8_t ReadWrite, uint8_t reg, uint8_t *val, uint8_t antVal)	//tar in "ReadWrite" (W el R), "reg" (ett register), "*val" (en array) & "antVal" (antal integer i variabeln)
+{
+  c6:	cf 92       	push	r12
+  c8:	df 92       	push	r13
+  ca:	ef 92       	push	r14
+  cc:	ff 92       	push	r15
+  ce:	0f 93       	push	r16
+  d0:	1f 93       	push	r17
+  d2:	cf 93       	push	r28
+  d4:	df 93       	push	r29
+  d6:	d8 2e       	mov	r13, r24
+  d8:	c6 2e       	mov	r12, r22
+  da:	7a 01       	movw	r14, r20
+  dc:	02 2f       	mov	r16, r18
+	cli();	//disable global interrupt
+  de:	f8 94       	cli
+	
+	if (ReadWrite == W)	//W=vill skriva till nrf-en (R=läsa av den, R_REGISTER (0x00) ,så skiter i en else funktion)
+  e0:	81 11       	cpse	r24, r1
+  e2:	02 c0       	rjmp	.+4      	; 0xe8 <WriteToNrf+0x22>
+	{
+		reg = W_REGISTER + reg;	//ex: reg = EN_AA: 0b0010 0000 + 0b0000 0001 = 0b0010 0001  
+  e4:	80 e2       	ldi	r24, 0x20	; 32
+  e6:	c8 0e       	add	r12, r24
+  e8:	8a e1       	ldi	r24, 0x1A	; 26
+  ea:	8a 95       	dec	r24
+  ec:	f1 f7       	brne	.-4      	; 0xea <WriteToNrf+0x24>
+  ee:	00 c0       	rjmp	.+0      	; 0xf0 <WriteToNrf+0x2a>
 	
 	//Static uint8_t för att det ska gå att returnera en array (lägg märke till "*" uppe på funktionen!!!)
 	static uint8_t ret[dataLen];	//antar att det längsta man vill läsa ut när man kallar på "R" är dataleng-långt, dvs använder man bara 1byte datalengd å vill läsa ut 5byte RF_Adress så skriv 5 här ist!!!	
 	
 	_delay_us(10);		//alla delay är så att nrfen ska hinna med! (microsekunder)
 	CSn_LOW;	//CSN low = nrf-chippet börjar lyssna
-  c4:	2a 98       	cbi	0x05, 2	; 5
-  c6:	8a e1       	ldi	r24, 0x1A	; 26
-  c8:	8a 95       	dec	r24
-  ca:	f1 f7       	brne	.-4      	; 0xc8 <WriteToNrf+0x2e>
-  cc:	00 c0       	rjmp	.+0      	; 0xce <WriteToNrf+0x34>
+  f0:	2a 98       	cbi	0x05, 2	; 5
+  f2:	8a e1       	ldi	r24, 0x1A	; 26
+  f4:	8a 95       	dec	r24
+  f6:	f1 f7       	brne	.-4      	; 0xf4 <WriteToNrf+0x2e>
+  f8:	00 c0       	rjmp	.+0      	; 0xfa <WriteToNrf+0x34>
 	_delay_us(10);		
 	WriteByteSPI(reg);	//första SPI-kommandot efter CSN-låg berättar för nrf'en vilket av dess register som ska redigeras ex: 0b0010 0001 write to registry EN_AA	
-  ce:	8d 2d       	mov	r24, r13
-  d0:	d1 df       	rcall	.-94     	; 0x74 <WriteByteSPI>
-  d2:	8a e1       	ldi	r24, 0x1A	; 26
-  d4:	8a 95       	dec	r24
-  d6:	f1 f7       	brne	.-4      	; 0xd4 <WriteToNrf+0x3a>
-  d8:	00 c0       	rjmp	.+0      	; 0xda <WriteToNrf+0x40>
+  fa:	8c 2d       	mov	r24, r12
+  fc:	bb df       	rcall	.-138    	; 0x74 <WriteByteSPI>
+  fe:	8a e1       	ldi	r24, 0x1A	; 26
+ 100:	8a 95       	dec	r24
+ 102:	f1 f7       	brne	.-4      	; 0x100 <WriteToNrf+0x3a>
+ 104:	00 c0       	rjmp	.+0      	; 0x106 <WriteToNrf+0x40>
 	_delay_us(10); 		
 	
 	int i;
 	for(i=0; i<antVal; i++)
-  da:	c0 e0       	ldi	r28, 0x00	; 0
-  dc:	d0 e0       	ldi	r29, 0x00	; 0
-  de:	10 e0       	ldi	r17, 0x00	; 0
-  e0:	17 c0       	rjmp	.+46     	; 0x110 <WriteToNrf+0x76>
+ 106:	10 e0       	ldi	r17, 0x00	; 0
+ 108:	10 16       	cp	r1, r16
+ 10a:	11 06       	cpc	r1, r17
+ 10c:	04 f5       	brge	.+64     	; 0x14e <WriteToNrf+0x88>
+ 10e:	c0 e0       	ldi	r28, 0x00	; 0
+ 110:	d0 e0       	ldi	r29, 0x00	; 0
 	{
 		if (ReadWrite == R && reg != W_TX_PAYLOAD)
-  e2:	81 e0       	ldi	r24, 0x01	; 1
-  e4:	c8 12       	cpse	r12, r24
-  e6:	0a c0       	rjmp	.+20     	; 0xfc <WriteToNrf+0x62>
-  e8:	80 ea       	ldi	r24, 0xA0	; 160
-  ea:	d8 16       	cp	r13, r24
-  ec:	39 f0       	breq	.+14     	; 0xfc <WriteToNrf+0x62>
+ 112:	81 e0       	ldi	r24, 0x01	; 1
+ 114:	d8 12       	cpse	r13, r24
+ 116:	0e c0       	rjmp	.+28     	; 0x134 <WriteToNrf+0x6e>
+ 118:	80 ea       	ldi	r24, 0xA0	; 160
+ 11a:	c8 16       	cp	r12, r24
+ 11c:	59 f0       	breq	.+22     	; 0x134 <WriteToNrf+0x6e>
 		{
 			ret[i]=WriteByteSPI(NOP);	//Andra och resten av SPI kommandot säger åt nrfen vilka värden som i det här fallet ska läsas
-  ee:	8f ef       	ldi	r24, 0xFF	; 255
-  f0:	c1 df       	rcall	.-126    	; 0x74 <WriteByteSPI>
+ 11e:	8f ef       	ldi	r24, 0xFF	; 255
+ 120:	a9 df       	rcall	.-174    	; 0x74 <WriteByteSPI>
 	return reg;	// Returnerar registret förhoppningsvis med bit5=1 (tx_ds=lyckad sändning)
 }
 
 
 /*****************nrf-setup***************************/ //Ställer in nrf'en genoma att först skicka vilket register, sen värdet på registret.
 uint8_t *WriteToNrf(uint8_t ReadWrite, uint8_t reg, uint8_t *val, uint8_t antVal)	//tar in "ReadWrite" (W el R), "reg" (ett register), "*val" (en array) & "antVal" (antal integer i variabeln)
-  f2:	fe 01       	movw	r30, r28
-  f4:	e0 50       	subi	r30, 0x00	; 0
-  f6:	ff 4f       	sbci	r31, 0xFF	; 255
+ 122:	fe 01       	movw	r30, r28
+ 124:	e0 50       	subi	r30, 0x00	; 0
+ 126:	ff 4f       	sbci	r31, 0xFF	; 255
 	int i;
 	for(i=0; i<antVal; i++)
 	{
 		if (ReadWrite == R && reg != W_TX_PAYLOAD)
 		{
 			ret[i]=WriteByteSPI(NOP);	//Andra och resten av SPI kommandot säger åt nrfen vilka värden som i det här fallet ska läsas
-  f8:	80 83       	st	Z, r24
-  fa:	05 c0       	rjmp	.+10     	; 0x106 <WriteToNrf+0x6c>
+ 128:	80 83       	st	Z, r24
+ 12a:	8a e1       	ldi	r24, 0x1A	; 26
+ 12c:	8a 95       	dec	r24
+ 12e:	f1 f7       	brne	.-4      	; 0x12c <WriteToNrf+0x66>
+ 130:	00 c0       	rjmp	.+0      	; 0x132 <WriteToNrf+0x6c>
+ 132:	09 c0       	rjmp	.+18     	; 0x146 <WriteToNrf+0x80>
 	return reg;	// Returnerar registret förhoppningsvis med bit5=1 (tx_ds=lyckad sändning)
 }
 
 
 /*****************nrf-setup***************************/ //Ställer in nrf'en genoma att först skicka vilket register, sen värdet på registret.
 uint8_t *WriteToNrf(uint8_t ReadWrite, uint8_t reg, uint8_t *val, uint8_t antVal)	//tar in "ReadWrite" (W el R), "reg" (ett register), "*val" (en array) & "antVal" (antal integer i variabeln)
-  fc:	f7 01       	movw	r30, r14
-  fe:	ec 0f       	add	r30, r28
- 100:	fd 1f       	adc	r31, r29
+ 134:	f7 01       	movw	r30, r14
+ 136:	ec 0f       	add	r30, r28
+ 138:	fd 1f       	adc	r31, r29
 			ret[i]=WriteByteSPI(NOP);	//Andra och resten av SPI kommandot säger åt nrfen vilka värden som i det här fallet ska läsas
 			_delay_us(10);			
 		}
 		else 
 		{
 			WriteByteSPI(val[i]);	//Andra och resten av SPI kommandot säger åt nrfen vilka värden som i det här fallet ska skrivas till
- 102:	80 81       	ld	r24, Z
- 104:	b7 df       	rcall	.-146    	; 0x74 <WriteByteSPI>
- 106:	8a e1       	ldi	r24, 0x1A	; 26
- 108:	8a 95       	dec	r24
- 10a:	f1 f7       	brne	.-4      	; 0x108 <WriteToNrf+0x6e>
- 10c:	00 c0       	rjmp	.+0      	; 0x10e <WriteToNrf+0x74>
+ 13a:	80 81       	ld	r24, Z
+ 13c:	9b df       	rcall	.-202    	; 0x74 <WriteByteSPI>
+ 13e:	8a e1       	ldi	r24, 0x1A	; 26
+ 140:	8a 95       	dec	r24
+ 142:	f1 f7       	brne	.-4      	; 0x140 <WriteToNrf+0x7a>
+ 144:	00 c0       	rjmp	.+0      	; 0x146 <WriteToNrf+0x80>
 	_delay_us(10);		
 	WriteByteSPI(reg);	//första SPI-kommandot efter CSN-låg berättar för nrf'en vilket av dess register som ska redigeras ex: 0b0010 0001 write to registry EN_AA	
 	_delay_us(10); 		
 	
 	int i;
 	for(i=0; i<antVal; i++)
- 10e:	21 96       	adiw	r28, 0x01	; 1
- 110:	c0 17       	cp	r28, r16
- 112:	d1 07       	cpc	r29, r17
- 114:	34 f3       	brlt	.-52     	; 0xe2 <WriteToNrf+0x48>
+ 146:	21 96       	adiw	r28, 0x01	; 1
+ 148:	c0 17       	cp	r28, r16
+ 14a:	d1 07       	cpc	r29, r17
+ 14c:	14 f3       	brlt	.-60     	; 0x112 <WriteToNrf+0x4c>
 		{
 			WriteByteSPI(val[i]);	//Andra och resten av SPI kommandot säger åt nrfen vilka värden som i det här fallet ska skrivas till
 			_delay_us(10);
 		}		
 	}
 	CSn_HIGH;	//CSN IR_High = nrf-chippet slutar lyssna
- 116:	2a 9a       	sbi	0x05, 2	; 5
+ 14e:	2a 9a       	sbi	0x05, 2	; 5
 	
 	sei(); //enable global interrupt
- 118:	78 94       	sei
+ 150:	78 94       	sei
 	
 	return ret;	//returnerar en array
 }
- 11a:	80 e0       	ldi	r24, 0x00	; 0
- 11c:	91 e0       	ldi	r25, 0x01	; 1
- 11e:	df 91       	pop	r29
- 120:	cf 91       	pop	r28
- 122:	1f 91       	pop	r17
- 124:	0f 91       	pop	r16
- 126:	ff 90       	pop	r15
- 128:	ef 90       	pop	r14
- 12a:	df 90       	pop	r13
- 12c:	cf 90       	pop	r12
- 12e:	08 95       	ret
+ 152:	80 e0       	ldi	r24, 0x00	; 0
+ 154:	91 e0       	ldi	r25, 0x01	; 1
+ 156:	df 91       	pop	r29
+ 158:	cf 91       	pop	r28
+ 15a:	1f 91       	pop	r17
+ 15c:	0f 91       	pop	r16
+ 15e:	ff 90       	pop	r15
+ 160:	ef 90       	pop	r14
+ 162:	df 90       	pop	r13
+ 164:	cf 90       	pop	r12
+ 166:	08 95       	ret
 
-00000130 <nrf24L01_init>:
+00000168 <nrf24L01_init>:
 
 //initierar nrf'en (obs nrfen måste vala i vila när detta sker CE-låg)
 void nrf24L01_init(void)
 {
- 130:	0f 93       	push	r16
- 132:	1f 93       	push	r17
- 134:	cf 93       	push	r28
- 136:	df 93       	push	r29
- 138:	00 d0       	rcall	.+0      	; 0x13a <nrf24L01_init+0xa>
- 13a:	00 d0       	rcall	.+0      	; 0x13c <nrf24L01_init+0xc>
- 13c:	1f 92       	push	r1
- 13e:	cd b7       	in	r28, 0x3d	; 61
- 140:	de b7       	in	r29, 0x3e	; 62
+ 168:	0f 93       	push	r16
+ 16a:	1f 93       	push	r17
+ 16c:	cf 93       	push	r28
+ 16e:	df 93       	push	r29
+ 170:	00 d0       	rcall	.+0      	; 0x172 <nrf24L01_init+0xa>
+ 172:	00 d0       	rcall	.+0      	; 0x174 <nrf24L01_init+0xc>
+ 174:	1f 92       	push	r1
+ 176:	cd b7       	in	r28, 0x3d	; 61
+ 178:	de b7       	in	r29, 0x3e	; 62
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 142:	2f ef       	ldi	r18, 0xFF	; 255
- 144:	80 e7       	ldi	r24, 0x70	; 112
- 146:	92 e0       	ldi	r25, 0x02	; 2
- 148:	21 50       	subi	r18, 0x01	; 1
- 14a:	80 40       	sbci	r24, 0x00	; 0
- 14c:	90 40       	sbci	r25, 0x00	; 0
- 14e:	e1 f7       	brne	.-8      	; 0x148 <nrf24L01_init+0x18>
- 150:	00 c0       	rjmp	.+0      	; 0x152 <nrf24L01_init+0x22>
- 152:	00 00       	nop
+ 17a:	2f ef       	ldi	r18, 0xFF	; 255
+ 17c:	80 e7       	ldi	r24, 0x70	; 112
+ 17e:	92 e0       	ldi	r25, 0x02	; 2
+ 180:	21 50       	subi	r18, 0x01	; 1
+ 182:	80 40       	sbci	r24, 0x00	; 0
+ 184:	90 40       	sbci	r25, 0x00	; 0
+ 186:	e1 f7       	brne	.-8      	; 0x180 <nrf24L01_init+0x18>
+ 188:	00 c0       	rjmp	.+0      	; 0x18a <nrf24L01_init+0x22>
+ 18a:	00 00       	nop
 	
 	uint8_t val[5];	//en array av integers som skickar värden till WriteToNrf-funktionen
 
 	//EN_AA - (auto-acknowledgements) - Transmittern får svar av recivern att packetet kommit fram, grymt!!! (behöver endast vara enablad på Transmittern!)
 	//Kräver att Transmittern även har satt SAMMA RF_Adress på sin mottagarkanal nedan ex: RX_ADDR_P0 = TX_ADDR
 	val[0]=0x01;	//ger första integern i arrayen "val" ett värde: 0x01=EN_AA på pipe P0. 
- 154:	11 e0       	ldi	r17, 0x01	; 1
- 156:	19 83       	std	Y+1, r17	; 0x01
+ 18c:	11 e0       	ldi	r17, 0x01	; 1
+ 18e:	19 83       	std	Y+1, r17	; 0x01
 	WriteToNrf(W, EN_AA, val, 1);	//W=ska skriva/ändra nåt i nrfen, EN_AA=vilket register ska ändras, val=en array med 1 till 32 värden  som ska skrivas till registret, 1=antal värden som ska läsas ur "val" arrayen.
- 158:	21 e0       	ldi	r18, 0x01	; 1
- 15a:	ae 01       	movw	r20, r28
- 15c:	4f 5f       	subi	r20, 0xFF	; 255
- 15e:	5f 4f       	sbci	r21, 0xFF	; 255
- 160:	61 e0       	ldi	r22, 0x01	; 1
- 162:	80 e0       	ldi	r24, 0x00	; 0
- 164:	9a df       	rcall	.-204    	; 0x9a <WriteToNrf>
+ 190:	21 e0       	ldi	r18, 0x01	; 1
+ 192:	ae 01       	movw	r20, r28
+ 194:	4f 5f       	subi	r20, 0xFF	; 255
+ 196:	5f 4f       	sbci	r21, 0xFF	; 255
+ 198:	61 e0       	ldi	r22, 0x01	; 1
+ 19a:	80 e0       	ldi	r24, 0x00	; 0
+ 19c:	94 df       	rcall	.-216    	; 0xc6 <WriteToNrf>
 	
 	//SETUP_RETR (the setup for "EN_AA")
 	val[0]=0x2F;	//0b0010 00011 "2" sets it up to 750uS delay between every retry (at least 500us at 250kbps and if payload >5bytes in 1Mbps, and if payload >15byte in 2Mbps) "F" is number of retries (1-15, now 15)
- 166:	8f e2       	ldi	r24, 0x2F	; 47
- 168:	89 83       	std	Y+1, r24	; 0x01
+ 19e:	8f e2       	ldi	r24, 0x2F	; 47
+ 1a0:	89 83       	std	Y+1, r24	; 0x01
 	WriteToNrf(W, SETUP_RETR, val, 1);
- 16a:	21 e0       	ldi	r18, 0x01	; 1
- 16c:	ae 01       	movw	r20, r28
- 16e:	4f 5f       	subi	r20, 0xFF	; 255
- 170:	5f 4f       	sbci	r21, 0xFF	; 255
- 172:	64 e0       	ldi	r22, 0x04	; 4
- 174:	80 e0       	ldi	r24, 0x00	; 0
- 176:	91 df       	rcall	.-222    	; 0x9a <WriteToNrf>
+ 1a2:	21 e0       	ldi	r18, 0x01	; 1
+ 1a4:	ae 01       	movw	r20, r28
+ 1a6:	4f 5f       	subi	r20, 0xFF	; 255
+ 1a8:	5f 4f       	sbci	r21, 0xFF	; 255
+ 1aa:	64 e0       	ldi	r22, 0x04	; 4
+ 1ac:	80 e0       	ldi	r24, 0x00	; 0
+ 1ae:	8b df       	rcall	.-234    	; 0xc6 <WriteToNrf>
 	
 	//Väljer vilken/vilka datapipes (0-5) som ska vara igång.
 	val[0]=0x01;
- 178:	19 83       	std	Y+1, r17	; 0x01
+ 1b0:	19 83       	std	Y+1, r17	; 0x01
 	WriteToNrf(W, EN_RXADDR, val, 1); //enable data pipe 0
- 17a:	21 e0       	ldi	r18, 0x01	; 1
- 17c:	ae 01       	movw	r20, r28
- 17e:	4f 5f       	subi	r20, 0xFF	; 255
- 180:	5f 4f       	sbci	r21, 0xFF	; 255
- 182:	62 e0       	ldi	r22, 0x02	; 2
- 184:	80 e0       	ldi	r24, 0x00	; 0
- 186:	89 df       	rcall	.-238    	; 0x9a <WriteToNrf>
+ 1b2:	21 e0       	ldi	r18, 0x01	; 1
+ 1b4:	ae 01       	movw	r20, r28
+ 1b6:	4f 5f       	subi	r20, 0xFF	; 255
+ 1b8:	5f 4f       	sbci	r21, 0xFF	; 255
+ 1ba:	62 e0       	ldi	r22, 0x02	; 2
+ 1bc:	80 e0       	ldi	r24, 0x00	; 0
+ 1be:	83 df       	rcall	.-250    	; 0xc6 <WriteToNrf>
 
 	//RF_Adress width setup (hur många byte ska RF_Adressen bestå av? 1-5 bytes) (5bytes säkrare då det finns störningar men långsammare dataöverföring) 5addr-32data-5addr-32data....
 	val[0]=0x03;
- 188:	03 e0       	ldi	r16, 0x03	; 3
- 18a:	09 83       	std	Y+1, r16	; 0x01
+ 1c0:	03 e0       	ldi	r16, 0x03	; 3
+ 1c2:	09 83       	std	Y+1, r16	; 0x01
 	WriteToNrf(W, SETUP_AW, val, 1); //0b0000 00011 motsvarar 5byte RF_Adress
- 18c:	21 e0       	ldi	r18, 0x01	; 1
- 18e:	ae 01       	movw	r20, r28
- 190:	4f 5f       	subi	r20, 0xFF	; 255
- 192:	5f 4f       	sbci	r21, 0xFF	; 255
- 194:	63 e0       	ldi	r22, 0x03	; 3
- 196:	80 e0       	ldi	r24, 0x00	; 0
- 198:	80 df       	rcall	.-256    	; 0x9a <WriteToNrf>
+ 1c4:	21 e0       	ldi	r18, 0x01	; 1
+ 1c6:	ae 01       	movw	r20, r28
+ 1c8:	4f 5f       	subi	r20, 0xFF	; 255
+ 1ca:	5f 4f       	sbci	r21, 0xFF	; 255
+ 1cc:	63 e0       	ldi	r22, 0x03	; 3
+ 1ce:	80 e0       	ldi	r24, 0x00	; 0
+ 1d0:	7a df       	rcall	.-268    	; 0xc6 <WriteToNrf>
 
 	//RF channel setup - väljer frekvens 2,400-2,527GHz 1MHz/steg
 	val[0]=0x01;
- 19a:	19 83       	std	Y+1, r17	; 0x01
+ 1d2:	19 83       	std	Y+1, r17	; 0x01
 	WriteToNrf(W, RF_CH, val, 1); //RF channel registry 0b0000 0001 = 2,401GHz (samma på TX å RX)
- 19c:	21 e0       	ldi	r18, 0x01	; 1
- 19e:	ae 01       	movw	r20, r28
- 1a0:	4f 5f       	subi	r20, 0xFF	; 255
- 1a2:	5f 4f       	sbci	r21, 0xFF	; 255
- 1a4:	65 e0       	ldi	r22, 0x05	; 5
- 1a6:	80 e0       	ldi	r24, 0x00	; 0
- 1a8:	78 df       	rcall	.-272    	; 0x9a <WriteToNrf>
+ 1d4:	21 e0       	ldi	r18, 0x01	; 1
+ 1d6:	ae 01       	movw	r20, r28
+ 1d8:	4f 5f       	subi	r20, 0xFF	; 255
+ 1da:	5f 4f       	sbci	r21, 0xFF	; 255
+ 1dc:	65 e0       	ldi	r22, 0x05	; 5
+ 1de:	80 e0       	ldi	r24, 0x00	; 0
+ 1e0:	72 df       	rcall	.-284    	; 0xc6 <WriteToNrf>
 
 	//RF setup	- väljer effekt och överföringshastighet 
 	val[0]=0x07;
- 1aa:	87 e0       	ldi	r24, 0x07	; 7
- 1ac:	89 83       	std	Y+1, r24	; 0x01
+ 1e2:	87 e0       	ldi	r24, 0x07	; 7
+ 1e4:	89 83       	std	Y+1, r24	; 0x01
 	WriteToNrf(W, RF_SETUP, val, 1); //00000111 bit 3="0" ger lägre överföringshastighet 1Mbps=Längre räckvidd, bit 2-1 ger effektläge hög (-0dB) ("11"=(-18dB) ger lägre effekt =strömsnålare men lägre range)
- 1ae:	21 e0       	ldi	r18, 0x01	; 1
- 1b0:	ae 01       	movw	r20, r28
- 1b2:	4f 5f       	subi	r20, 0xFF	; 255
- 1b4:	5f 4f       	sbci	r21, 0xFF	; 255
- 1b6:	66 e0       	ldi	r22, 0x06	; 6
- 1b8:	80 e0       	ldi	r24, 0x00	; 0
- 1ba:	6f df       	rcall	.-290    	; 0x9a <WriteToNrf>
+ 1e6:	21 e0       	ldi	r18, 0x01	; 1
+ 1e8:	ae 01       	movw	r20, r28
+ 1ea:	4f 5f       	subi	r20, 0xFF	; 255
+ 1ec:	5f 4f       	sbci	r21, 0xFF	; 255
+ 1ee:	66 e0       	ldi	r22, 0x06	; 6
+ 1f0:	80 e0       	ldi	r24, 0x00	; 0
+ 1f2:	69 df       	rcall	.-302    	; 0xc6 <WriteToNrf>
 
 	//RX RF_Adress setup 5 byte - väljer RF_Adressen på Recivern (Måste ges samma RF_Adress om Transmittern har EN_AA påslaget!!!)
 	int i;
 	for(i=0; i<5; i++)	
 	{
 		val[i]=0x12;	//RF channel registry 0b10101011 x 5 - skriver samma RF_Adress 5ggr för att få en lätt och säker RF_Adress (samma på transmitterns chip!!!)
- 1bc:	12 e1       	ldi	r17, 0x12	; 18
- 1be:	19 83       	std	Y+1, r17	; 0x01
- 1c0:	1a 83       	std	Y+2, r17	; 0x02
- 1c2:	1b 83       	std	Y+3, r17	; 0x03
- 1c4:	1c 83       	std	Y+4, r17	; 0x04
- 1c6:	1d 83       	std	Y+5, r17	; 0x05
+ 1f4:	12 e1       	ldi	r17, 0x12	; 18
+ 1f6:	19 83       	std	Y+1, r17	; 0x01
+ 1f8:	1a 83       	std	Y+2, r17	; 0x02
+ 1fa:	1b 83       	std	Y+3, r17	; 0x03
+ 1fc:	1c 83       	std	Y+4, r17	; 0x04
+ 1fe:	1d 83       	std	Y+5, r17	; 0x05
 	}
 	WriteToNrf(W, RX_ADDR_P0, val, 5); //0b0010 1010 write registry - eftersom vi valde pipe 0 i "EN_RXADDR" ovan, ger vi RF_Adressen till denna pipe. (kan ge olika RF_Adresser till olika pipes och därmed lyssna på olika transmittrar) 	
- 1c8:	25 e0       	ldi	r18, 0x05	; 5
- 1ca:	ae 01       	movw	r20, r28
- 1cc:	4f 5f       	subi	r20, 0xFF	; 255
- 1ce:	5f 4f       	sbci	r21, 0xFF	; 255
- 1d0:	6a e0       	ldi	r22, 0x0A	; 10
- 1d2:	80 e0       	ldi	r24, 0x00	; 0
- 1d4:	62 df       	rcall	.-316    	; 0x9a <WriteToNrf>
+ 200:	25 e0       	ldi	r18, 0x05	; 5
+ 202:	ae 01       	movw	r20, r28
+ 204:	4f 5f       	subi	r20, 0xFF	; 255
+ 206:	5f 4f       	sbci	r21, 0xFF	; 255
+ 208:	6a e0       	ldi	r22, 0x0A	; 10
+ 20a:	80 e0       	ldi	r24, 0x00	; 0
+ 20c:	5c df       	rcall	.-328    	; 0xc6 <WriteToNrf>
 	
 	//TX RF_Adress setup 5 byte -  väljer RF_Adressen på Transmittern (kan kommenteras bort på en "ren" Reciver)
 	//int i; //återanvänder föregående i...
 	for(i=0; i<5; i++)	
 	{
 		val[i]=0x12;	//RF channel registry 0b10111100 x 5 - skriver samma RF_Adress 5ggr för att få en lätt och säker RF_Adress (samma på Reciverns chip och på RX-RF_Adressen ovan om EN_AA enablats!!!)
- 1d6:	19 83       	std	Y+1, r17	; 0x01
- 1d8:	1a 83       	std	Y+2, r17	; 0x02
- 1da:	1b 83       	std	Y+3, r17	; 0x03
- 1dc:	1c 83       	std	Y+4, r17	; 0x04
- 1de:	1d 83       	std	Y+5, r17	; 0x05
+ 20e:	19 83       	std	Y+1, r17	; 0x01
+ 210:	1a 83       	std	Y+2, r17	; 0x02
+ 212:	1b 83       	std	Y+3, r17	; 0x03
+ 214:	1c 83       	std	Y+4, r17	; 0x04
+ 216:	1d 83       	std	Y+5, r17	; 0x05
 	}
 	WriteToNrf(W, TX_ADDR, val, 5); 
- 1e0:	25 e0       	ldi	r18, 0x05	; 5
- 1e2:	ae 01       	movw	r20, r28
- 1e4:	4f 5f       	subi	r20, 0xFF	; 255
- 1e6:	5f 4f       	sbci	r21, 0xFF	; 255
- 1e8:	60 e1       	ldi	r22, 0x10	; 16
- 1ea:	80 e0       	ldi	r24, 0x00	; 0
- 1ec:	56 df       	rcall	.-340    	; 0x9a <WriteToNrf>
+ 218:	25 e0       	ldi	r18, 0x05	; 5
+ 21a:	ae 01       	movw	r20, r28
+ 21c:	4f 5f       	subi	r20, 0xFF	; 255
+ 21e:	5f 4f       	sbci	r21, 0xFF	; 255
+ 220:	60 e1       	ldi	r22, 0x10	; 16
+ 222:	80 e0       	ldi	r24, 0x00	; 0
+ 224:	50 df       	rcall	.-352    	; 0xc6 <WriteToNrf>
 
 	// payload width setup - Hur många byte ska skickas per sändning? 1-32byte 
 	val[0]=dataLen;		//"0b0000 0001"=1 byte per 5byte RF_Adress  (kan välja upp till "0b00100000"=32byte/5byte RF_Adress) (definierat högst uppe i global variabel!)
- 1ee:	09 83       	std	Y+1, r16	; 0x01
+ 226:	09 83       	std	Y+1, r16	; 0x01
 	WriteToNrf(W, RX_PW_P0, val, 1);
- 1f0:	21 e0       	ldi	r18, 0x01	; 1
- 1f2:	ae 01       	movw	r20, r28
- 1f4:	4f 5f       	subi	r20, 0xFF	; 255
- 1f6:	5f 4f       	sbci	r21, 0xFF	; 255
- 1f8:	61 e1       	ldi	r22, 0x11	; 17
- 1fa:	80 e0       	ldi	r24, 0x00	; 0
- 1fc:	4e df       	rcall	.-356    	; 0x9a <WriteToNrf>
+ 228:	21 e0       	ldi	r18, 0x01	; 1
+ 22a:	ae 01       	movw	r20, r28
+ 22c:	4f 5f       	subi	r20, 0xFF	; 255
+ 22e:	5f 4f       	sbci	r21, 0xFF	; 255
+ 230:	61 e1       	ldi	r22, 0x11	; 17
+ 232:	80 e0       	ldi	r24, 0x00	; 0
+ 234:	48 df       	rcall	.-368    	; 0xc6 <WriteToNrf>
 	
 	//CONFIG reg setup - Nu är allt inställt, boota upp nrf'en och gör den antingen Transmitter lr Reciver
 	val[0]=0x1E;  //0b0000 1110 config registry	bit "1":1=power up,  bit "0":0=transmitter (bit "0":1=Reciver) (bit "4":1=>mask_Max_RT,dvs IRQ-vektorn reagerar inte om sändningen misslyckades. 
- 1fe:	8e e1       	ldi	r24, 0x1E	; 30
- 200:	89 83       	std	Y+1, r24	; 0x01
+ 236:	8e e1       	ldi	r24, 0x1E	; 30
+ 238:	89 83       	std	Y+1, r24	; 0x01
 	WriteToNrf(W, CONFIG, val, 1);
- 202:	21 e0       	ldi	r18, 0x01	; 1
- 204:	ae 01       	movw	r20, r28
- 206:	4f 5f       	subi	r20, 0xFF	; 255
- 208:	5f 4f       	sbci	r21, 0xFF	; 255
- 20a:	60 e0       	ldi	r22, 0x00	; 0
- 20c:	80 e0       	ldi	r24, 0x00	; 0
- 20e:	45 df       	rcall	.-374    	; 0x9a <WriteToNrf>
- 210:	2f ef       	ldi	r18, 0xFF	; 255
- 212:	80 e7       	ldi	r24, 0x70	; 112
- 214:	92 e0       	ldi	r25, 0x02	; 2
- 216:	21 50       	subi	r18, 0x01	; 1
- 218:	80 40       	sbci	r24, 0x00	; 0
- 21a:	90 40       	sbci	r25, 0x00	; 0
- 21c:	e1 f7       	brne	.-8      	; 0x216 <nrf24L01_init+0xe6>
- 21e:	00 c0       	rjmp	.+0      	; 0x220 <nrf24L01_init+0xf0>
- 220:	00 00       	nop
-
-//device need 1.5ms to reach standby mode
-	_delay_ms(100);	
-
-	//sei();	
-}
- 222:	0f 90       	pop	r0
- 224:	0f 90       	pop	r0
- 226:	0f 90       	pop	r0
- 228:	0f 90       	pop	r0
- 22a:	0f 90       	pop	r0
- 22c:	df 91       	pop	r29
- 22e:	cf 91       	pop	r28
- 230:	1f 91       	pop	r17
- 232:	0f 91       	pop	r16
- 234:	08 95       	ret
-
-00000236 <ChangeAddress>:
-
-void ChangeAddress(uint8_t adress)
-{
- 236:	1f 93       	push	r17
- 238:	cf 93       	push	r28
- 23a:	df 93       	push	r29
- 23c:	00 d0       	rcall	.+0      	; 0x23e <ChangeAddress+0x8>
- 23e:	00 d0       	rcall	.+0      	; 0x240 <ChangeAddress+0xa>
- 240:	1f 92       	push	r1
- 242:	cd b7       	in	r28, 0x3d	; 61
- 244:	de b7       	in	r29, 0x3e	; 62
- 246:	18 2f       	mov	r17, r24
+ 23a:	21 e0       	ldi	r18, 0x01	; 1
+ 23c:	ae 01       	movw	r20, r28
+ 23e:	4f 5f       	subi	r20, 0xFF	; 255
+ 240:	5f 4f       	sbci	r21, 0xFF	; 255
+ 242:	60 e0       	ldi	r22, 0x00	; 0
+ 244:	80 e0       	ldi	r24, 0x00	; 0
+ 246:	3f df       	rcall	.-386    	; 0xc6 <WriteToNrf>
  248:	2f ef       	ldi	r18, 0xFF	; 255
  24a:	80 e7       	ldi	r24, 0x70	; 112
  24c:	92 e0       	ldi	r25, 0x02	; 2
  24e:	21 50       	subi	r18, 0x01	; 1
  250:	80 40       	sbci	r24, 0x00	; 0
  252:	90 40       	sbci	r25, 0x00	; 0
- 254:	e1 f7       	brne	.-8      	; 0x24e <ChangeAddress+0x18>
- 256:	00 c0       	rjmp	.+0      	; 0x258 <ChangeAddress+0x22>
+ 254:	e1 f7       	brne	.-8      	; 0x24e <nrf24L01_init+0xe6>
+ 256:	00 c0       	rjmp	.+0      	; 0x258 <nrf24L01_init+0xf0>
  258:	00 00       	nop
+
+//device need 1.5ms to reach standby mode
+	_delay_ms(100);	
+
+	//sei();	
+}
+ 25a:	0f 90       	pop	r0
+ 25c:	0f 90       	pop	r0
+ 25e:	0f 90       	pop	r0
+ 260:	0f 90       	pop	r0
+ 262:	0f 90       	pop	r0
+ 264:	df 91       	pop	r29
+ 266:	cf 91       	pop	r28
+ 268:	1f 91       	pop	r17
+ 26a:	0f 91       	pop	r16
+ 26c:	08 95       	ret
+
+0000026e <ChangeAddress>:
+
+void ChangeAddress(uint8_t adress)
+{
+ 26e:	1f 93       	push	r17
+ 270:	cf 93       	push	r28
+ 272:	df 93       	push	r29
+ 274:	00 d0       	rcall	.+0      	; 0x276 <ChangeAddress+0x8>
+ 276:	00 d0       	rcall	.+0      	; 0x278 <ChangeAddress+0xa>
+ 278:	1f 92       	push	r1
+ 27a:	cd b7       	in	r28, 0x3d	; 61
+ 27c:	de b7       	in	r29, 0x3e	; 62
+ 27e:	18 2f       	mov	r17, r24
+ 280:	2f ef       	ldi	r18, 0xFF	; 255
+ 282:	80 e7       	ldi	r24, 0x70	; 112
+ 284:	92 e0       	ldi	r25, 0x02	; 2
+ 286:	21 50       	subi	r18, 0x01	; 1
+ 288:	80 40       	sbci	r24, 0x00	; 0
+ 28a:	90 40       	sbci	r25, 0x00	; 0
+ 28c:	e1 f7       	brne	.-8      	; 0x286 <ChangeAddress+0x18>
+ 28e:	00 c0       	rjmp	.+0      	; 0x290 <ChangeAddress+0x22>
+ 290:	00 00       	nop
 	uint8_t val[5];
 	//RX RF_Adress setup 5 byte - väljer RF_Adressen på Recivern (Måste ges samma RF_Adress om Transmittern har EN_AA påslaget!!!)
 	int i;
 	for(i=0; i<5; i++)
 	{
 		val[i]=adress;	//RF channel registry 0b10101011 x 5 - skriver samma RF_Adress 5ggr för att få en lätt och säker RF_Adress (samma på transmitterns chip!!!)
- 25a:	19 83       	std	Y+1, r17	; 0x01
- 25c:	1a 83       	std	Y+2, r17	; 0x02
- 25e:	1b 83       	std	Y+3, r17	; 0x03
- 260:	1c 83       	std	Y+4, r17	; 0x04
- 262:	1d 83       	std	Y+5, r17	; 0x05
+ 292:	19 83       	std	Y+1, r17	; 0x01
+ 294:	1a 83       	std	Y+2, r17	; 0x02
+ 296:	1b 83       	std	Y+3, r17	; 0x03
+ 298:	1c 83       	std	Y+4, r17	; 0x04
+ 29a:	1d 83       	std	Y+5, r17	; 0x05
 	}
 	WriteToNrf(W, RX_ADDR_P0, val, 5); //0b0010 1010 write registry - eftersom vi valde pipe 0 i "EN_RXADDR" ovan, ger vi RF_Adressen till denna pipe. (kan ge olika RF_Adresser till olika pipes och därmed lyssna på olika transmittrar)
- 264:	25 e0       	ldi	r18, 0x05	; 5
- 266:	ae 01       	movw	r20, r28
- 268:	4f 5f       	subi	r20, 0xFF	; 255
- 26a:	5f 4f       	sbci	r21, 0xFF	; 255
- 26c:	6a e0       	ldi	r22, 0x0A	; 10
- 26e:	80 e0       	ldi	r24, 0x00	; 0
- 270:	14 df       	rcall	.-472    	; 0x9a <WriteToNrf>
+ 29c:	25 e0       	ldi	r18, 0x05	; 5
+ 29e:	ae 01       	movw	r20, r28
+ 2a0:	4f 5f       	subi	r20, 0xFF	; 255
+ 2a2:	5f 4f       	sbci	r21, 0xFF	; 255
+ 2a4:	6a e0       	ldi	r22, 0x0A	; 10
+ 2a6:	80 e0       	ldi	r24, 0x00	; 0
+ 2a8:	0e df       	rcall	.-484    	; 0xc6 <WriteToNrf>
 	
 	//TX RF_Adress setup 5 byte -  väljer RF_Adressen på Transmittern (kan kommenteras bort på en "ren" Reciver)
 	//int i; //återanvänder föregående i...
 	for(i=0; i<5; i++)
 	{
 		val[i]=adress;	//RF channel registry 0b10111100 x 5 - skriver samma RF_Adress 5ggr för att få en lätt och säker RF_Adress (samma på Reciverns chip och på RX-RF_Adressen ovan om EN_AA enablats!!!)
- 272:	19 83       	std	Y+1, r17	; 0x01
- 274:	1a 83       	std	Y+2, r17	; 0x02
- 276:	1b 83       	std	Y+3, r17	; 0x03
- 278:	1c 83       	std	Y+4, r17	; 0x04
- 27a:	1d 83       	std	Y+5, r17	; 0x05
+ 2aa:	19 83       	std	Y+1, r17	; 0x01
+ 2ac:	1a 83       	std	Y+2, r17	; 0x02
+ 2ae:	1b 83       	std	Y+3, r17	; 0x03
+ 2b0:	1c 83       	std	Y+4, r17	; 0x04
+ 2b2:	1d 83       	std	Y+5, r17	; 0x05
 	}
 	WriteToNrf(W, TX_ADDR, val, 5);
- 27c:	25 e0       	ldi	r18, 0x05	; 5
- 27e:	ae 01       	movw	r20, r28
- 280:	4f 5f       	subi	r20, 0xFF	; 255
- 282:	5f 4f       	sbci	r21, 0xFF	; 255
- 284:	60 e1       	ldi	r22, 0x10	; 16
- 286:	80 e0       	ldi	r24, 0x00	; 0
- 288:	08 df       	rcall	.-496    	; 0x9a <WriteToNrf>
- 28a:	2f ef       	ldi	r18, 0xFF	; 255
- 28c:	80 e7       	ldi	r24, 0x70	; 112
- 28e:	92 e0       	ldi	r25, 0x02	; 2
- 290:	21 50       	subi	r18, 0x01	; 1
- 292:	80 40       	sbci	r24, 0x00	; 0
- 294:	90 40       	sbci	r25, 0x00	; 0
- 296:	e1 f7       	brne	.-8      	; 0x290 <ChangeAddress+0x5a>
- 298:	00 c0       	rjmp	.+0      	; 0x29a <ChangeAddress+0x64>
- 29a:	00 00       	nop
+ 2b4:	25 e0       	ldi	r18, 0x05	; 5
+ 2b6:	ae 01       	movw	r20, r28
+ 2b8:	4f 5f       	subi	r20, 0xFF	; 255
+ 2ba:	5f 4f       	sbci	r21, 0xFF	; 255
+ 2bc:	60 e1       	ldi	r22, 0x10	; 16
+ 2be:	80 e0       	ldi	r24, 0x00	; 0
+ 2c0:	02 df       	rcall	.-508    	; 0xc6 <WriteToNrf>
+ 2c2:	2f ef       	ldi	r18, 0xFF	; 255
+ 2c4:	80 e7       	ldi	r24, 0x70	; 112
+ 2c6:	92 e0       	ldi	r25, 0x02	; 2
+ 2c8:	21 50       	subi	r18, 0x01	; 1
+ 2ca:	80 40       	sbci	r24, 0x00	; 0
+ 2cc:	90 40       	sbci	r25, 0x00	; 0
+ 2ce:	e1 f7       	brne	.-8      	; 0x2c8 <ChangeAddress+0x5a>
+ 2d0:	00 c0       	rjmp	.+0      	; 0x2d2 <ChangeAddress+0x64>
+ 2d2:	00 00       	nop
 	_delay_ms(100);
 }
- 29c:	0f 90       	pop	r0
- 29e:	0f 90       	pop	r0
- 2a0:	0f 90       	pop	r0
- 2a2:	0f 90       	pop	r0
- 2a4:	0f 90       	pop	r0
- 2a6:	df 91       	pop	r29
- 2a8:	cf 91       	pop	r28
- 2aa:	1f 91       	pop	r17
- 2ac:	08 95       	ret
+ 2d4:	0f 90       	pop	r0
+ 2d6:	0f 90       	pop	r0
+ 2d8:	0f 90       	pop	r0
+ 2da:	0f 90       	pop	r0
+ 2dc:	0f 90       	pop	r0
+ 2de:	df 91       	pop	r29
+ 2e0:	cf 91       	pop	r28
+ 2e2:	1f 91       	pop	r17
+ 2e4:	08 95       	ret
 
-000002ae <transmit_payload>:
+000002e6 <transmit_payload>:
 	cli();	//Disable global interrupt
 }
 
 //Sänd data
 void transmit_payload(uint8_t * W_buff)
 {
- 2ae:	cf 93       	push	r28
- 2b0:	df 93       	push	r29
- 2b2:	ec 01       	movw	r28, r24
+ 2e6:	cf 93       	push	r28
+ 2e8:	df 93       	push	r29
+ 2ea:	ec 01       	movw	r28, r24
 	WriteToNrf(R, FLUSH_TX, W_buff, 0); //Cancella eventuali dati nel registro di TX dell'nrf
- 2b4:	20 e0       	ldi	r18, 0x00	; 0
- 2b6:	ac 01       	movw	r20, r24
- 2b8:	61 ee       	ldi	r22, 0xE1	; 225
- 2ba:	81 e0       	ldi	r24, 0x01	; 1
- 2bc:	ee de       	rcall	.-548    	; 0x9a <WriteToNrf>
+ 2ec:	20 e0       	ldi	r18, 0x00	; 0
+ 2ee:	ac 01       	movw	r20, r24
+ 2f0:	61 ee       	ldi	r22, 0xE1	; 225
+ 2f2:	81 e0       	ldi	r24, 0x01	; 1
+ 2f4:	e8 de       	rcall	.-560    	; 0xc6 <WriteToNrf>
 	
 	WriteToNrf(R, W_TX_PAYLOAD, W_buff, dataLen);	//skickar datan i W_buff till nrf-en (obs går ej att läsa w_tx_payload-registret!!!)
- 2be:	23 e0       	ldi	r18, 0x03	; 3
- 2c0:	ae 01       	movw	r20, r28
- 2c2:	60 ea       	ldi	r22, 0xA0	; 160
- 2c4:	81 e0       	ldi	r24, 0x01	; 1
- 2c6:	e9 de       	rcall	.-558    	; 0x9a <WriteToNrf>
+ 2f6:	23 e0       	ldi	r18, 0x03	; 3
+ 2f8:	ae 01       	movw	r20, r28
+ 2fa:	60 ea       	ldi	r22, 0xA0	; 160
+ 2fc:	81 e0       	ldi	r24, 0x01	; 1
+ 2fe:	e3 de       	rcall	.-570    	; 0xc6 <WriteToNrf>
 	
 	sei();	//enable global interrupt- redan på!
- 2c8:	78 94       	sei
- 2ca:	8f e1       	ldi	r24, 0x1F	; 31
- 2cc:	9e e4       	ldi	r25, 0x4E	; 78
- 2ce:	01 97       	sbiw	r24, 0x01	; 1
- 2d0:	f1 f7       	brne	.-4      	; 0x2ce <transmit_payload+0x20>
- 2d2:	00 c0       	rjmp	.+0      	; 0x2d4 <transmit_payload+0x26>
- 2d4:	00 00       	nop
+ 300:	78 94       	sei
+ 302:	8f e1       	ldi	r24, 0x1F	; 31
+ 304:	9e e4       	ldi	r25, 0x4E	; 78
+ 306:	01 97       	sbiw	r24, 0x01	; 1
+ 308:	f1 f7       	brne	.-4      	; 0x306 <transmit_payload+0x20>
+ 30a:	00 c0       	rjmp	.+0      	; 0x30c <transmit_payload+0x26>
+ 30c:	00 00       	nop
 	//USART_Transmit(GetReg(STATUS));
 
 	_delay_ms(10);		//bisogno davvero essere ms, non noi? Yeees! altrimenti non funzionerà!
 	CE_HIGH;	//CE hög=sänd data	INT0 interruptet körs när sändningen lyckats och om EN_AA är på, också svaret från recivern är mottagen
- 2d6:	29 9a       	sbi	0x05, 1	; 5
+ 30e:	29 9a       	sbi	0x05, 1	; 5
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 2d8:	95 e3       	ldi	r25, 0x35	; 53
- 2da:	9a 95       	dec	r25
- 2dc:	f1 f7       	brne	.-4      	; 0x2da <transmit_payload+0x2c>
- 2de:	00 00       	nop
+ 310:	95 e3       	ldi	r25, 0x35	; 53
+ 312:	9a 95       	dec	r25
+ 314:	f1 f7       	brne	.-4      	; 0x312 <transmit_payload+0x2c>
+ 316:	00 00       	nop
 	_delay_us(20);		//minst 10us!
 	CE_LOW;	//CE låg
- 2e0:	29 98       	cbi	0x05, 1	; 5
+ 318:	29 98       	cbi	0x05, 1	; 5
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 2e2:	8f e1       	ldi	r24, 0x1F	; 31
- 2e4:	9e e4       	ldi	r25, 0x4E	; 78
- 2e6:	01 97       	sbiw	r24, 0x01	; 1
- 2e8:	f1 f7       	brne	.-4      	; 0x2e6 <transmit_payload+0x38>
- 2ea:	00 c0       	rjmp	.+0      	; 0x2ec <transmit_payload+0x3e>
- 2ec:	00 00       	nop
+ 31a:	8f e1       	ldi	r24, 0x1F	; 31
+ 31c:	9e e4       	ldi	r25, 0x4E	; 78
+ 31e:	01 97       	sbiw	r24, 0x01	; 1
+ 320:	f1 f7       	brne	.-4      	; 0x31e <transmit_payload+0x38>
+ 322:	00 c0       	rjmp	.+0      	; 0x324 <transmit_payload+0x3e>
+ 324:	00 00       	nop
 	_delay_ms(10);		//behöver det verkligen vara ms å inte us??? JAAAAAA! annars funkar det inte!!!
 
 	//cli();	//Disable global interrupt... ajabaja, då stängs USART_RX-lyssningen av!
 
 }
- 2ee:	df 91       	pop	r29
- 2f0:	cf 91       	pop	r28
- 2f2:	08 95       	ret
+ 326:	df 91       	pop	r29
+ 328:	cf 91       	pop	r28
+ 32a:	08 95       	ret
 
-000002f4 <main>:
+0000032c <main>:
 
 
 /////////////////////////////////////////////////////
 
 int main(void)
 {
- 2f4:	cf 93       	push	r28
- 2f6:	df 93       	push	r29
- 2f8:	00 d0       	rcall	.+0      	; 0x2fa <main+0x6>
- 2fa:	1f 92       	push	r1
- 2fc:	cd b7       	in	r28, 0x3d	; 61
- 2fe:	de b7       	in	r29, 0x3e	; 62
+ 32c:	cf 93       	push	r28
+ 32e:	df 93       	push	r29
+ 330:	00 d0       	rcall	.+0      	; 0x332 <main+0x6>
+ 332:	1f 92       	push	r1
+ 334:	cd b7       	in	r28, 0x3d	; 61
+ 336:	de b7       	in	r29, 0x3e	; 62
 	uint8_t W_buffer[dataLen];	//Creates a buffer to receive data with specified length (ex. dataLen = 5 bytes)
+	static uint8_t tmp;
 
 	clockprescale();
- 300:	aa de       	rcall	.-684    	; 0x56 <clockprescale>
+ 338:	8e de       	rcall	.-740    	; 0x56 <clockprescale>
 	InitSPI();
- 302:	af de       	rcall	.-674    	; 0x62 <InitSPI>
+ 33a:	93 de       	rcall	.-730    	; 0x62 <InitSPI>
     	ioinit();
- 304:	bd de       	rcall	.-646    	; 0x80 <ioinit>
+ 33c:	a1 de       	rcall	.-702    	; 0x80 <ioinit>
 	INT0_interrupt_init();
- 306:	be de       	rcall	.-644    	; 0x84 <INT0_interrupt_init>
+ 33e:	a2 de       	rcall	.-700    	; 0x84 <INT0_interrupt_init>
 
 	nrf24L01_init();
- 308:	13 df       	rcall	.-474    	; 0x130 <nrf24L01_init>
+ 340:	13 df       	rcall	.-474    	; 0x168 <nrf24L01_init>
 
-	SETBIT(PORTB,0);		//per controllare che il lde funzioni!
- 30a:	28 9a       	sbi	0x05, 0	; 5
- 30c:	2f ef       	ldi	r18, 0xFF	; 255
- 30e:	89 e6       	ldi	r24, 0x69	; 105
- 310:	98 e1       	ldi	r25, 0x18	; 24
- 312:	21 50       	subi	r18, 0x01	; 1
- 314:	80 40       	sbci	r24, 0x00	; 0
- 316:	90 40       	sbci	r25, 0x00	; 0
- 318:	e1 f7       	brne	.-8      	; 0x312 <main+0x1e>
- 31a:	00 c0       	rjmp	.+0      	; 0x31c <main+0x28>
- 31c:	00 00       	nop
+	LED_ON;		//per controllare che il lde funzioni!
+ 342:	28 9a       	sbi	0x05, 0	; 5
+ 344:	2f ef       	ldi	r18, 0xFF	; 255
+ 346:	89 e6       	ldi	r24, 0x69	; 105
+ 348:	98 e1       	ldi	r25, 0x18	; 24
+ 34a:	21 50       	subi	r18, 0x01	; 1
+ 34c:	80 40       	sbci	r24, 0x00	; 0
+ 34e:	90 40       	sbci	r25, 0x00	; 0
+ 350:	e1 f7       	brne	.-8      	; 0x34a <main+0x1e>
+ 352:	00 c0       	rjmp	.+0      	; 0x354 <main+0x28>
+ 354:	00 00       	nop
 	_delay_ms(1000);
-	CLEARBIT(PORTB,0);
- 31e:	28 98       	cbi	0x05, 0	; 5
+	LED_OFF;
+ 356:	28 98       	cbi	0x05, 0	; 5
 
 
 	
+	tmp = GetReg(7);
+ 358:	87 e0       	ldi	r24, 0x07	; 7
+ 35a:	9f de       	rcall	.-706    	; 0x9a <GetReg>
+ 35c:	80 93 03 01 	sts	0x0103, r24
 	ChangeAddress(0x12);	//change address to send to different receiver
- 320:	82 e1       	ldi	r24, 0x12	; 18
- 322:	89 df       	rcall	.-238    	; 0x236 <ChangeAddress>
+ 360:	82 e1       	ldi	r24, 0x12	; 18
+ 362:	85 df       	rcall	.-246    	; 0x26e <ChangeAddress>
+	W_buffer[0] = 0x30;
+ 364:	80 e3       	ldi	r24, 0x30	; 48
+ 366:	89 83       	std	Y+1, r24	; 0x01
+	W_buffer[1] = 0x31;
+ 368:	81 e3       	ldi	r24, 0x31	; 49
+ 36a:	8a 83       	std	Y+2, r24	; 0x02
+	W_buffer[2] = 0x32;
+ 36c:	82 e3       	ldi	r24, 0x32	; 50
+ 36e:	8b 83       	std	Y+3, r24	; 0x03
 	transmit_payload(W_buffer);	//Sänder datan
- 324:	ce 01       	movw	r24, r28
- 326:	01 96       	adiw	r24, 0x01	; 1
- 328:	c2 df       	rcall	.-124    	; 0x2ae <transmit_payload>
- 32a:	ff cf       	rjmp	.-2      	; 0x32a <main+0x36>
+ 370:	ce 01       	movw	r24, r28
+ 372:	01 96       	adiw	r24, 0x01	; 1
+ 374:	b8 df       	rcall	.-144    	; 0x2e6 <transmit_payload>
 
-0000032c <__vector_1>:
+	while(1)
+	{
+		LED_ON;		//per controllare che il lde funzioni!
+ 376:	28 9a       	sbi	0x05, 0	; 5
+ 378:	2f ef       	ldi	r18, 0xFF	; 255
+ 37a:	84 e3       	ldi	r24, 0x34	; 52
+ 37c:	9c e0       	ldi	r25, 0x0C	; 12
+ 37e:	21 50       	subi	r18, 0x01	; 1
+ 380:	80 40       	sbci	r24, 0x00	; 0
+ 382:	90 40       	sbci	r25, 0x00	; 0
+ 384:	e1 f7       	brne	.-8      	; 0x37e <main+0x52>
+ 386:	00 c0       	rjmp	.+0      	; 0x388 <main+0x5c>
+ 388:	00 00       	nop
+		_delay_ms(500);
+		LED_OFF;
+ 38a:	28 98       	cbi	0x05, 0	; 5
+ 38c:	2f ef       	ldi	r18, 0xFF	; 255
+ 38e:	84 e3       	ldi	r24, 0x34	; 52
+ 390:	9c e0       	ldi	r25, 0x0C	; 12
+ 392:	21 50       	subi	r18, 0x01	; 1
+ 394:	80 40       	sbci	r24, 0x00	; 0
+ 396:	90 40       	sbci	r25, 0x00	; 0
+ 398:	e1 f7       	brne	.-8      	; 0x392 <main+0x66>
+ 39a:	00 c0       	rjmp	.+0      	; 0x39c <main+0x70>
+ 39c:	00 00       	nop
+ 39e:	eb cf       	rjmp	.-42     	; 0x376 <main+0x4a>
+
+000003a0 <__vector_1>:
 
 
 
 
 ISR(INT0_vect)	//vettore che viene attivato quando transmit_payload riuscito a inviare o quando receive_payload i dati ricevuti NOTA: quando Mask_Max_rt è impostato nel registro di configurazione in modo che non si spegnerà quando MAX_RT è stato raggiunto sulle nmisslyckats lodge mailing!
 {
- 32c:	1f 92       	push	r1
- 32e:	0f 92       	push	r0
- 330:	0f b6       	in	r0, 0x3f	; 63
- 332:	0f 92       	push	r0
- 334:	11 24       	eor	r1, r1
- 336:	2f 93       	push	r18
- 338:	8f 93       	push	r24
- 33a:	9f 93       	push	r25
+ 3a0:	1f 92       	push	r1
+ 3a2:	0f 92       	push	r0
+ 3a4:	0f b6       	in	r0, 0x3f	; 63
+ 3a6:	0f 92       	push	r0
+ 3a8:	11 24       	eor	r1, r1
+ 3aa:	2f 93       	push	r18
+ 3ac:	8f 93       	push	r24
+ 3ae:	9f 93       	push	r25
 	cli();	//Disable global interrupt
- 33c:	f8 94       	cli
+ 3b0:	f8 94       	cli
 	CE_LOW;		//ce låg igen -sluta lyssna/sända
- 33e:	29 98       	cbi	0x05, 1	; 5
+ 3b2:	29 98       	cbi	0x05, 1	; 5
 	
 	LED_ON; //led on
- 340:	28 9a       	sbi	0x05, 0	; 5
- 342:	2f ef       	ldi	r18, 0xFF	; 255
- 344:	84 e3       	ldi	r24, 0x34	; 52
- 346:	9c e0       	ldi	r25, 0x0C	; 12
- 348:	21 50       	subi	r18, 0x01	; 1
- 34a:	80 40       	sbci	r24, 0x00	; 0
- 34c:	90 40       	sbci	r25, 0x00	; 0
- 34e:	e1 f7       	brne	.-8      	; 0x348 <__vector_1+0x1c>
- 350:	00 c0       	rjmp	.+0      	; 0x352 <__vector_1+0x26>
- 352:	00 00       	nop
+ 3b4:	28 9a       	sbi	0x05, 0	; 5
+ 3b6:	2f ef       	ldi	r18, 0xFF	; 255
+ 3b8:	84 e3       	ldi	r24, 0x34	; 52
+ 3ba:	9c e0       	ldi	r25, 0x0C	; 12
+ 3bc:	21 50       	subi	r18, 0x01	; 1
+ 3be:	80 40       	sbci	r24, 0x00	; 0
+ 3c0:	90 40       	sbci	r25, 0x00	; 0
+ 3c2:	e1 f7       	brne	.-8      	; 0x3bc <__vector_1+0x1c>
+ 3c4:	00 c0       	rjmp	.+0      	; 0x3c6 <__vector_1+0x26>
+ 3c6:	00 00       	nop
 	_delay_ms(500);
 	LED_OFF; //led off
- 354:	28 98       	cbi	0x05, 0	; 5
+ 3c8:	28 98       	cbi	0x05, 0	; 5
 	//for (int i=0;i<dataLen;i++)
 	//{
 		//USART_Transmit(data[i]);
 	//}
 	//
 	sei();
- 356:	78 94       	sei
+ 3ca:	78 94       	sei
 
 }
- 358:	9f 91       	pop	r25
- 35a:	8f 91       	pop	r24
- 35c:	2f 91       	pop	r18
- 35e:	0f 90       	pop	r0
- 360:	0f be       	out	0x3f, r0	; 63
- 362:	0f 90       	pop	r0
- 364:	1f 90       	pop	r1
- 366:	18 95       	reti
+ 3cc:	9f 91       	pop	r25
+ 3ce:	8f 91       	pop	r24
+ 3d0:	2f 91       	pop	r18
+ 3d2:	0f 90       	pop	r0
+ 3d4:	0f be       	out	0x3f, r0	; 63
+ 3d6:	0f 90       	pop	r0
+ 3d8:	1f 90       	pop	r1
+ 3da:	18 95       	reti
 
-00000368 <_exit>:
- 368:	f8 94       	cli
+000003dc <_exit>:
+ 3dc:	f8 94       	cli
 
-0000036a <__stop_program>:
- 36a:	ff cf       	rjmp	.-2      	; 0x36a <__stop_program>
+000003de <__stop_program>:
+ 3de:	ff cf       	rjmp	.-2      	; 0x3de <__stop_program>

@@ -83,7 +83,8 @@ void ioinit(void)
 //när data tas emot/skickas så går interr uptet INT0 näst längst ner igång
 void INT0_interrupt_init(void)	
 {
-	DDRD &= ~(1<<DDD2);	//Extern interrupt på INT0, dvs sätt den till input!
+	DDRD &= ~(1<<DDD2);	//Extern interrupt su INT0
+	PORTD |= (1<<PD2);	//Abilita pullup su INT0
 	
 	EICRA |=  (1<<ISC01);// INT0 falling edge	PD2
 	EICRA  &=  ~(1<<ISC00);// INT0 falling edge	PD2

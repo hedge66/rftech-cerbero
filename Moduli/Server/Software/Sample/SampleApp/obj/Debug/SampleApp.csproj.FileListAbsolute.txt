@@ -1,0 +1,2 @@
+C:\Documents and Settings\Utente\Desktop\Hedge66\Cerbero\Moduli\Server\Software\Sample\SampleApp\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Utente\Desktop\Hedge66\Cerbero\Moduli\Server\Software\Sample\SampleApp\obj\Debug\TinyCLR_DebugReferences.cache

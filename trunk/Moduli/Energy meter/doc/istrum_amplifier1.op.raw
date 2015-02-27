@@ -1,0 +1,64 @@
+Title: * C:\Users\Fratta\Desktop\Hedge66\Cerbero\Moduli\Energy meter\doc\istrum_amplifier1.asc
+Date: Thu Feb 26 17:13:38 2015
+Plotname: Operating Point
+Flags: real
+No. Variables: 50
+No. Points:            1
+Offset:   0.0000000000000000e+000
+Command: Linear Technology Corporation LTspice IV
+Backannotation: u2 1 2 3 4 5 6 7 8
+Backannotation: u1 1 2 3 4 5 6 7 8
+Variables:
+	0	V(n001)	voltage
+	1	V(n004)	voltage
+	2	V(n002)	voltage
+	3	V(n011)	voltage
+	4	V(n003)	voltage
+	5	V(n009)	voltage
+	6	V(n007)	voltage
+	7	V(n008)	voltage
+	8	V(n005)	voltage
+	9	V(n015)	voltage
+	10	V(n013)	voltage
+	11	V(n014)	voltage
+	12	V(n010)	voltage
+	13	V(n006)	voltage
+	14	V(n012)	voltage
+	15	V(n016)	voltage
+	16	I(L1)	device_current
+	17	I(R14)	device_current
+	18	I(R13)	device_current
+	19	I(R12)	device_current
+	20	I(R11)	device_current
+	21	I(R7)	device_current
+	22	I(R6)	device_current
+	23	I(R5)	device_current
+	24	I(R4)	device_current
+	25	I(R3)	device_current
+	26	I(R2)	device_current
+	27	I(R1)	device_current
+	28	I(R10)	device_current
+	29	I(R9)	device_current
+	30	I(R8)	device_current
+	31	I(V3)	device_current
+	32	I(V2)	device_current
+	33	I(V1)	device_current
+	34	Ix(u2:1)	subckt_current
+	35	Ix(u2:2)	subckt_current
+	36	Ix(u2:3)	subckt_current
+	37	Ix(u2:4)	subckt_current
+	38	Ix(u2:5)	subckt_current
+	39	Ix(u2:6)	subckt_current
+	40	Ix(u2:7)	subckt_current
+	41	Ix(u2:8)	subckt_current
+	42	Ix(u1:1)	subckt_current
+	43	Ix(u1:2)	subckt_current
+	44	Ix(u1:3)	subckt_current
+	45	Ix(u1:4)	subckt_current
+	46	Ix(u1:5)	subckt_current
+	47	Ix(u1:6)	subckt_current
+	48	Ix(u1:7)	subckt_current
+	49	Ix(u1:8)	subckt_current
+Binary:
+gfffff
+@33Ó?ž–B‡¥-ÁäØ?# Ñ?Íüß?# Ñ?ãØ?# Ñ?‹ Ñ?}’Ù?Wr-ÁW•BŒ Ñ?# Ñ?½ôŸ?<¥5Wí¤µ<¥5j¥§5…z§5½ôŸ¿ÈôŸ¿4<29š…´$†´–}79á¨|6j¥§5Ôb{¶ÝôŸ¿&aà4Ãç¹$†´‹K£²È£²Q'H¸Ô˜´–}7¹óÝi9$†4š…´‹K£²†K£²wïG¸/êu³4<2¹’Qd9š…4
